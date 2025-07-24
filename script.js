@@ -9,38 +9,62 @@ function getComputerChoice() {
   }
 }
 
-function getHumanChoice() {
-  let humanChoice = prompt("Enter either Rock, Paper, or Scissors");
-  return humanChoice;
-}
-
 let humanScore = 0;
 let computerScore = 0;
 
-
-
 function playRound(humanChoice, computerChoice) {
+  let resultMessage = '';
   humanChoice = humanChoice.toLowerCase();
   if (humanChoice === computerChoice) {
-    console.log("It's a tie");
-  } else if ((humanChoice === "rock" && computerChoice === "paper") || (humanChoice === "paper" && computerChoice === "scissors") || (humanChoice === "scissors" && computerChoice === "rock")) {
+    resultMessage = `It's a tie! You both chose ${humanChoice}.`;
+  } else if (
+    (humanChoice === "rock" && computerChoice === "paper") || 
+    (humanChoice === "paper" && computerChoice === "scissors") ||
+    (humanChoice === "scissors" && computerChoice === "rock")) {
     computerScore++;
-    console.log(`You lose! ${computerChoice} beats ${humanChoice}`);
+    resultMessage = `You lose! ${computerChoice} beats ${humanChoice}`;
   } else {
     humanScore++;
-    console.log(`You won! ${humanChoice} beats ${computerChoice}`);
+    resultMessage = `You won! ${humanChoice} beats ${computerChoice}`;
   }
-  console.log(`Score is:\nHuman: ${humanScore}\nComputer: ${computerScore}`);
+  resultsDiv.textContent = resultMessage;
+  scoreDiv.textContent = `Score -> Human: ${humanScore} | Computer: ${computerScore}`;
+
+  checkWinner();
 }
 
 
-function playGame() {
-  let i = 0;
-  while(i < 5) {
-    let humanSelection = getHumanChoice();
-    let computerSelection = getComputerChoice();
-    playRound(humanSelection, computerSelection);
-    i++;
+const rockBtn = document.querySelector('#rock');
+const paperBtn = document.querySelector('#paper');
+const scissorsBtn = document.querySelector('#scissors');
+
+const resultsDiv = document.querySelector('#results-display');
+const scoreDiv = document.querySelector('#score-display');
+
+rockBtn.addEventListener('click', () => {
+  playRound('rock', getComputerChoice());
+});
+
+paperBtn.addEventListener('click', () => {
+  playRound('paper', getComputerChoice());
+});
+scissorsBtn.addEventListener('click', () => {
+  playRound('scissors', getComputerChoice());
+});
+
+function checkWinner() {
+  if (humanScore === 5) {
+    resultsDiv.textContent = 'Congratulations! You won the game!';
+    
+    rockBtn.disabled = true;
+    paperBtn.disabled = true;
+    scissorsBtn.disabled = true;
+  } 
+  else if (computerScore === 5) {
+    resultsDiv.textContent = 'Game Over! The computer won.';
+
+    rockBtn.disabled = true;
+    paperBtn.disabled = true;
+    scissorsBtn.disabled = true;
   }
 }
-playGame();
